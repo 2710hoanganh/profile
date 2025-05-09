@@ -56,12 +56,6 @@ export default function Hero() {
           <div className="text-cyan-100 text-base md:text-lg mb-2 glass px-6 py-3 rounded-full inline-block">
             Ho Chi Minh City, Viet Nam &nbsp;|&nbsp; hoangcm821@gmail.com &nbsp;|&nbsp; 0931872335
           </div>
-          
-          <div className="text-cyan-200 text-base md:text-lg mb-8">
-            <a href="https://linkedin.com/in/cao-minh-hoang" target="_blank" rel="noopener noreferrer" className="hover:text-purple-400 transition-colors">
-              linkedin.com/in/cao-minh-hoang
-            </a>
-          </div>
 
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
