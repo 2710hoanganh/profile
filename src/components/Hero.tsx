@@ -40,11 +40,11 @@ export default function Hero() {
             <TypeAnimation
               sequence={[
                 'Software Engineer',
-                1000,
+                1500,
                 'Backend Developer',
-                1000,
-                'Cloud Native Enthusiast',
-                1000,
+                1500,
+                'Full Stack Developer',
+                1500,
               ]}
               wrapper="h2"
               speed={50}
@@ -53,9 +53,12 @@ export default function Hero() {
             />
           </div>
 
+
           <div className="text-cyan-100 text-base md:text-lg mb-2 glass px-6 py-3 rounded-full inline-block">
             Ho Chi Minh City, Viet Nam &nbsp;|&nbsp; hoangcm821@gmail.com &nbsp;|&nbsp; 0931872335
           </div>
+
+          <div className="mb-4"></div>
 
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
@@ -63,7 +66,13 @@ export default function Hero() {
             transition={{ delay: 0.4 }}
             className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mb-12 glass px-8 py-6 rounded-2xl"
           >
-            I am a backend developer with strong experience in .NET, Node.js, and cloud-native systems. I enjoy building scalable, secure, and maintainable solutions, and have contributed to a variety of enterprise and startup projects. Passionate about learning, teamwork, and delivering real business value.
+            I'm a backend-focused software engineer experienced in building scalable systems with .NET Core, Node.js, and modern JavaScript/TypeScript. Skilled in both SQL/NoSQL databases, REST/Web APIs, and message-driven architectures. I enjoy working with cloud-native technologies, containerization, and DevOps practices.<br /><br />
+            <span className="text-cyan-400">
+              I've contributed to projects from small business sites to large-scale applications.
+            </span><br /><br />
+            <span className="text-cyan-400">
+              I'm always learning and exploring new technologies to stay ahead in web development.
+            </span>
           </motion.p>
 
           <div className="flex justify-center space-x-6">

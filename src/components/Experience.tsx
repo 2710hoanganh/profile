@@ -2,7 +2,6 @@
 
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
-import { FaBriefcase, FaCalendarAlt, FaMapMarkerAlt, FaUsers, FaCode } from 'react-icons/fa'
 
 const experiences = [
   {
@@ -122,108 +121,67 @@ export default function Experience() {
     threshold: 0.1,
   })
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2
-      }
-    }
-  }
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.5
-      }
-    }
-  }
-
   return (
-    <section id="experience" className="py-24 relative overflow-hidden">
-      <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
-      <div className="container mx-auto px-4 relative z-10">
+    <section id="experience" className="py-20 bg-transparent">
+      <div className="container mx-auto px-4">
         <motion.div
           ref={ref}
-          initial="hidden"
-          animate={inView ? "visible" : "hidden"}
-          variants={containerVariants}
-          className="max-w-6xl mx-auto"
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5 }}
+          className="max-w-4xl mx-auto"
         >
-          <motion.h2 
-            variants={itemVariants}
-            className="text-5xl font-bold text-center mb-16 gradient-text"
-          >
+          <h2 className="text-4xl font-bold text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 via-sky-400 to-purple-500">
             Work Experience
-          </motion.h2>
+          </h2>
           <div className="space-y-8">
             {experiences.map((experience, index) => (
               <motion.div
                 key={experience.title}
-                variants={itemVariants}
-                whileHover={{ scale: 1.02 }}
-                className="glass p-8 rounded-2xl hover:border-cyan-400/50 transition-all duration-300"
+                initial={{ opacity: 0, x: -20 }}
+                animate={inView ? { opacity: 1, x: 0 } : {}}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="glass hover-lift border-2 border-transparent hover:border-gradient-to-r hover:from-cyan-400 hover:to-purple-500 shadow-xl backdrop-blur-lg p-6 rounded-2xl text-white"
+                style={{ boxShadow: '0 8px 32px 0 rgba(99,102,241,0.25), 0 1.5px 8px 0 rgba(168,85,247,0.12)' }}
               >
-                <div className="flex flex-col md:flex-row justify-between items-start gap-6 mb-6">
-                  <div className="flex-1">
-                    <div className="flex items-center space-x-4 mb-4">
-                      <div className="p-3 rounded-xl bg-gradient-to-br from-cyan-400 to-purple-500">
-                        <FaBriefcase className="w-6 h-6 text-white" />
-                      </div>
-                      <div>
-                        <h3 className="text-2xl font-semibold text-cyan-200">{experience.title}</h3>
-                        <p className="text-cyan-300">{experience.company}</p>
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                      <div className="flex items-center space-x-3">
-                        <FaCalendarAlt className="w-5 h-5 text-cyan-400" />
-                        <span className="text-cyan-300">{experience.period}</span>
-                      </div>
-                      <div className="flex items-center space-x-3">
-                        <FaMapMarkerAlt className="w-5 h-5 text-cyan-400" />
-                        <span className="text-cyan-300">{experience.location}</span>
-                      </div>
-                      <div className="flex items-center space-x-3">
-                        <FaCode className="w-5 h-5 text-cyan-400" />
-                        <span className="text-cyan-300">{experience.role}</span>
-                      </div>
-                      <div className="flex items-center space-x-3">
-                        <FaUsers className="w-5 h-5 text-cyan-400" />
-                        <span className="text-cyan-300">Team size: {experience.teamSize}</span>
-                      </div>
-                    </div>
+                <div className="flex justify-between items-start mb-4">
+                  <div>
+                    <h3 className="text-xl font-bold gradient-text-animate mb-1">{experience.title}</h3>
+                    <p className="text-cyan-100 font-semibold">{experience.company}</p>
+                    <p className="text-sm text-cyan-300">{experience.location}</p>
+                    <p className="text-sm text-cyan-300 font-semibold mt-1">Project: <span className="font-normal">{experience.project}</span></p>
+                    <p className="text-sm text-cyan-300 font-semibold">Role: <span className="font-normal">{experience.role}</span></p>
+                    <p className="text-sm text-cyan-300 font-semibold">Team size: <span className="font-normal">{experience.teamSize}</span></p>
+                    <p className="text-sm text-cyan-300 font-semibold">Technology: <span className="font-normal">{experience.technology}</span></p>
                   </div>
+                  <span className="text-sm text-cyan-200 font-bold">
+                    {experience.period}
+                  </span>
                 </div>
-
-                <div className="mb-6">
-                  <h4 className="text-xl font-semibold text-cyan-200 mb-2">Project: {experience.project}</h4>
-                  <ul className="list-disc list-inside space-y-2 text-gray-300 mb-4">
-                    {experience.description.map((item, i) => (
-                      <li key={i}>{item}</li>
-                    ))}
-                  </ul>
-                  <div className="flex flex-wrap gap-2">
-                    {experience.technology.split(', ').map((tech, i) => (
-                      <span
-                        key={i}
-                        className="px-3 py-1 text-sm bg-gradient-to-r from-cyan-400/20 to-purple-500/20 text-cyan-200 rounded-full border border-cyan-400/20"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
+                <ul className="list-disc list-inside space-y-2 text-cyan-100 mb-2">
+                  {experience.description.map((item, i) => (
+                    <motion.li
+                      key={i}
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={inView ? { opacity: 1, x: 0 } : {}}
+                      transition={{ duration: 0.4, delay: 0.2 + i * 0.1 }}
+                    >
+                      {item}
+                    </motion.li>
+                  ))}
+                </ul>
                 <div>
-                  <h4 className="text-xl font-semibold text-cyan-200 mb-3">Key Responsibilities:</h4>
-                  <ul className="list-disc list-inside space-y-2 text-gray-300">
+                  <p className="font-bold text-cyan-200 mb-1">Responsibilities:</p>
+                  <ul className="list-disc list-inside space-y-1 text-cyan-100 ml-4">
                     {experience.responsibilities.map((item, i) => (
-                      <li key={i}>{item}</li>
+                      <motion.li
+                        key={i}
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={inView ? { opacity: 1, x: 0 } : {}}
+                        transition={{ duration: 0.4, delay: 0.4 + i * 0.08 }}
+                      >
+                        {item}
+                      </motion.li>
                     ))}
                   </ul>
                 </div>
