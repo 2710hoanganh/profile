@@ -6,33 +6,33 @@ import { FaReact, FaNodeJs, FaDatabase, FaAws } from 'react-icons/fa'
 import { SiTypescript, SiTailwindcss, SiNextdotjs, SiMongodb } from 'react-icons/si'
 
 const skills = [
-  { name: 'HTML' },
-  { name: 'CSS' },
-  { name: 'JavaScript' },
-  { name: 'TypeScript' },
-  { name: 'ReactJS' },
-  { name: 'React Hooks' },
-  { name: 'Redux' },
-  { name: 'EJS' },
-  { name: 'Node.js' },
-  { name: 'Express' },
-  { name: '.NET Core' },
-  { name: '.NET Framework' },
-  { name: 'Web API' },
-  { name: 'MongoDB' },
-  { name: 'MySQL' },
-  { name: 'SQL Server' },
-  { name: 'Prisma' },
-  { name: 'Entity Framework' },
-  { name: 'AutoMapper' },
-  { name: 'REST API' },
-  { name: 'RabbitMQ' },
-  { name: 'Socket.IO' },
-  { name: 'Cloudinary' },
-  { name: 'Design Pattern' },
-  { name: 'Git' },
-  { name: 'Docker' },
-  { name: 'Kubernetes' },
+  { name: 'HTML', icon: '🌐' },
+  { name: 'CSS', icon: '🎨' },
+  { name: 'JavaScript', icon: '📜' },
+  { name: 'TypeScript', icon: '📘' },
+  { name: 'ReactJS', icon: '⚛️' },
+  { name: 'React Hooks', icon: '🪝' },
+  { name: 'Redux', icon: '🔄' },
+  { name: 'EJS', icon: '📝' },
+  { name: 'Node.js', icon: '🟢' },
+  { name: 'Express', icon: '🚂' },
+  { name: '.NET Core', icon: '💠' },
+  { name: '.NET Framework', icon: '🔷' },
+  { name: 'Web API', icon: '🌐' },
+  { name: 'MongoDB', icon: '🍃' },
+  { name: 'MySQL', icon: '🐬' },
+  { name: 'SQL Server', icon: '🗄️' },
+  { name: 'Prisma', icon: '🔧' },
+  { name: 'Entity Framework', icon: '🏗️' },
+  { name: 'AutoMapper', icon: '🔄' },
+  { name: 'REST API', icon: '🔌' },
+  { name: 'RabbitMQ', icon: '🐰' },
+  { name: 'Socket.IO', icon: '🔌' },
+  { name: 'Cloudinary', icon: '☁️' },
+  { name: 'Design Pattern', icon: '🎯' },
+  { name: 'Git', icon: '📦' },
+  { name: 'Docker', icon: '🐳' },
+  { name: 'Kubernetes', icon: '⚓' },
 ]
 
 export default function Skills() {
@@ -41,28 +41,62 @@ export default function Skills() {
     threshold: 0.1,
   })
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5
+      }
+    }
+  }
+
   return (
-    <section id="skills" className="py-20 bg-transparent">
-      <div className="container mx-auto px-4">
+    <section id="skills" className="py-24 relative overflow-hidden">
+      <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
+      <div className="container mx-auto px-4 relative z-10">
         <motion.div
           ref={ref}
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
-          className="max-w-4xl mx-auto"
+          initial="hidden"
+          animate={inView ? "visible" : "hidden"}
+          variants={containerVariants}
+          className="max-w-6xl mx-auto"
         >
-          <h2 className="text-4xl font-bold text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 via-sky-400 to-purple-500">
+          <motion.h2 
+            variants={itemVariants}
+            className="text-5xl font-bold text-center mb-16 gradient-text"
+          >
             Skills & Expertise
-          </h2>
-          <ul className="grid grid-cols-2 md:grid-cols-4 gap-6 text-lg text-white list-disc list-inside">
+          </motion.h2>
+          <motion.div 
+            variants={containerVariants}
+            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+          >
             {skills.map((skill) => (
-              <li key={skill.name} className="mb-2">
-                <span className="inline-block px-3 py-1 bg-gradient-to-r from-cyan-200 to-sky-300 text-cyan-900 rounded-full font-semibold shadow">
-                  {skill.name}
-                </span>
-              </li>
+              <motion.div
+                key={skill.name}
+                variants={itemVariants}
+                whileHover={{ scale: 1.05 }}
+                className="glass p-4 rounded-xl hover:border-cyan-400/50 transition-all duration-300"
+              >
+                <div className="flex items-center space-x-3">
+                  <span className="text-2xl">{skill.icon}</span>
+                  <span className="text-cyan-200 font-medium">{skill.name}</span>
+                </div>
+              </motion.div>
             ))}
-          </ul>
+          </motion.div>
         </motion.div>
       </div>
     </section>

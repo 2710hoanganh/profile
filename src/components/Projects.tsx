@@ -105,48 +105,103 @@ export default function Projects() {
     },
   })
 
+  const [ref, inView] = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  })
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2
+      }
+    }
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5
+      }
+    }
+  }
+
   return (
-    <section id="projects" className="py-20 relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #0f2027 0%, #203a43 100%)' }}>
+    <section id="projects" className="py-24 relative overflow-hidden">
+      <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
       <div className="container max-w-7xl mx-auto px-8 relative z-10">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          ref={ref}
+          initial="hidden"
+          animate={inView ? "visible" : "hidden"}
+          variants={containerVariants}
           className="max-w-6xl mx-auto"
         >
-          <h2 className="text-4xl font-bold text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 via-sky-400 to-purple-500">
+          <motion.h2 
+            variants={itemVariants}
+            className="text-5xl font-bold text-center mb-16 gradient-text"
+          >
             Featured Projects
-          </h2>
+          </motion.h2>
           <div className="relative">
             <div ref={sliderRef} className="keen-slider px-0">
               {displayProjects.map((project, index) => (
-                <div className="keen-slider__slide flex flex-col items-center h-full" key={project.title}>
-                  <div className="bg-white/80 dark:bg-gray-900/80 rounded-2xl overflow-hidden shadow-2xl flex flex-col w-full max-w-xs h-[780px] border-2 border-cyan-300 backdrop-blur-md">
-                    <div className="relative h-60 rounded-t-2xl overflow-hidden">
+                <motion.div
+                  key={project.title}
+                  variants={itemVariants}
+                  className="keen-slider__slide flex flex-col items-center h-full"
+                >
+                  <div className="glass rounded-2xl overflow-hidden shadow-2xl flex flex-col w-full max-w-xs h-[780px] hover:border-cyan-400/50 transition-all duration-300">
+                    <div className="relative h-60 rounded-t-2xl overflow-hidden group">
                       <img
                         src={project.image_url}
                         alt={project.title}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                       />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div className="absolute bottom-4 left-4 right-4 flex justify-center space-x-4">
+                          <motion.a
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            href="#"
+                            className="p-2 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-colors"
+                          >
+                            <FaGithub className="w-5 h-5 text-white" />
+                          </motion.a>
+                          <motion.a
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            href="#"
+                            className="p-2 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-colors"
+                          >
+                            <FaExternalLinkAlt className="w-5 h-5 text-white" />
+                          </motion.a>
+                        </div>
+                      </div>
                     </div>
                     <div className="p-6 flex-1 flex flex-col h-full min-h-0">
-                      <h3 className="text-xl font-bold mb-2 text-gray-800 dark:text-white">{project.title}</h3>
-                      <p className="text-gray-600 dark:text-gray-300 mb-4 text-base line-clamp-3">
+                      <h3 className="text-xl font-bold mb-2 text-cyan-200">{project.title}</h3>
+                      <p className="text-gray-300 mb-4 text-base line-clamp-3">
                         {project.description}
                       </p>
                       <div className="flex flex-wrap gap-2 mb-4">
                         {project.technologies.map((tech) => (
                           <span
                             key={tech}
-                            className="px-3 py-1 text-sm bg-gradient-to-r from-cyan-200 to-sky-300 text-cyan-900 rounded-full font-semibold shadow"
+                            className="px-3 py-1 text-sm bg-gradient-to-r from-cyan-400/20 to-purple-500/20 text-cyan-200 rounded-full border border-cyan-400/20"
                           >
                             {tech}
                           </span>
                         ))}
                       </div>
                       <div className="mb-2 flex-1 min-h-0 overflow-y-auto">
-                        <p className="font-semibold text-cyan-700 dark:text-cyan-300 mb-1">Key Contributions:</p>
-                        <ul className="list-disc list-inside text-gray-600 dark:text-gray-300 ml-4 text-sm">
+                        <p className="font-semibold text-cyan-200 mb-2">Key Contributions:</p>
+                        <ul className="list-disc list-inside text-gray-300 ml-4 text-sm space-y-1">
                           {project.contributions.map((item, i) => (
                             <li key={i}>{item}</li>
                           ))}
@@ -154,33 +209,43 @@ export default function Projects() {
                       </div>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
-            {/* Nút điều hướng trái/phải */}
-            <button
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
               onClick={() => instanceRef.current?.prev()}
-              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-cyan-200 dark:bg-cyan-900 rounded-full shadow-lg p-3 hover:bg-cyan-300 dark:hover:bg-cyan-700 text-2xl"
+              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 glass rounded-full p-3 hover:border-cyan-400/50 transition-all duration-300"
               aria-label="Previous"
-              style={{ transform: 'translateY(-50%)' }}
             >
-              <svg width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" /></svg>
-            </button>
-            <button
+              <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" className="text-cyan-200">
+                <path d="M15 19l-7-7 7-7" />
+              </svg>
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
               onClick={() => instanceRef.current?.next()}
-              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-cyan-200 dark:bg-cyan-900 rounded-full shadow-lg p-3 hover:bg-cyan-300 dark:hover:bg-cyan-700 text-2xl"
+              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 glass rounded-full p-3 hover:border-cyan-400/50 transition-all duration-300"
               aria-label="Next"
-              style={{ transform: 'translateY(-50%)' }}
             >
-              <svg width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" /></svg>
-            </button>
-            {/* Pagination chấm tròn */}
-            <div className="flex justify-center mt-6">
+              <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" className="text-cyan-200">
+                <path d="M9 5l7 7-7 7" />
+              </svg>
+            </motion.button>
+            <div className="flex justify-center mt-8 space-x-2">
               {Array.from({ length: 3 }).map((_, idx) => (
-                <button
+                <motion.button
                   key={idx}
+                  whileHover={{ scale: 1.2 }}
+                  whileTap={{ scale: 0.9 }}
                   onClick={() => instanceRef.current?.moveToIdx(idx * 3)}
-                  className={`mx-1 w-3 h-3 rounded-full ${Math.floor(currentSlide / 3) === idx ? 'bg-cyan-400' : 'bg-gray-300 dark:bg-gray-600'}`}
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                    Math.floor(currentSlide / 3) === idx 
+                      ? 'bg-gradient-to-r from-cyan-400 to-purple-500' 
+                      : 'bg-gray-600'
+                  }`}
                   aria-label={`Go to page ${idx + 1}`}
                 />
               ))}
