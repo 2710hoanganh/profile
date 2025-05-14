@@ -3,11 +3,27 @@
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa'
-import 'keen-slider/keen-slider.min.css'
-import { useKeenSlider } from 'keen-slider/react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react';
+import TextureOverlay from './TextureOverlay'
+import IlluminatedLetter from './IlluminatedLetter'
+import RenaissanceDecorator from './RenaissanceDecorator'
+import React from 'react'
+import RenaissanceScroll from './RenaissanceScroll'
+import RenaissanceFrame from './RenaissanceFrame'
+import RenaissanceCaption from './RenaissanceCaption'
 
-const projects = [
+// Define a type for project items
+type ProjectItem = {
+  title: string;
+  description: string;
+  technologies: string[];
+  contributions: string[];
+  image_url: string;
+  aspect_ratio: string;
+  object_position?: string;
+};
+
+const projects: ProjectItem[] = [
   {
     title: 'X-Project, Research Platform, Titan Service',
     description: 'Participated in the development of three internal systems focusing on data processing, research management, and service integration. The systems included functionalities such as real-time notifications, multi-database integration, and secure authentication.',
@@ -23,7 +39,9 @@ const projects = [
       'Implemented multi-factor authentication using Google and Microsoft Authenticator.',
       'Supported deployment and ensured system scalability.',
     ],
-    image_url: 'https://teachyourkidscode.com/wp-content/uploads/2022/02/best-coding-language-for-games.jpg',
+    image_url: '/mona-lisa.jpg',
+    aspect_ratio: '800/1192',
+    object_position: 'center 30%'
   },
   {
     title: 'NZ App & NZ Chat',
@@ -37,7 +55,9 @@ const projects = [
       'Integrated AI-powered features into the chat system via RabbitMQ.',
       'Handled media upload and user authentication using Cloudinary and Argon2.',
     ],
-    image_url: 'https://teachyourkidscode.com/wp-content/uploads/2022/02/best-coding-language-for-games.jpg',
+    image_url: '/creation-of-adam.jpg',
+    aspect_ratio: '800/363',
+    object_position: 'center'
   },
   {
     title: "What's The Price", 
@@ -53,7 +73,9 @@ const projects = [
       'Strengthened expertise in Git through advanced branching strategies and participating in code review workflows.',
       'Reinforced core knowledge of React.js and Redux through real-world feature implementation and state management.',
     ],
-    image_url: 'https://teachyourkidscode.com/wp-content/uploads/2022/02/best-coding-language-for-games.jpg',
+    image_url: '/renaissance-real.jpg',
+    aspect_ratio: '800/502',
+    object_position: 'center'
   },
   {
     title: 'LMS Library',
@@ -64,7 +86,9 @@ const projects = [
       'Developed RESTful APIs for lesson management and file access.',
       'Performed thorough testing and optimization for system stability.',
     ],
-    image_url: 'https://teachyourkidscode.com/wp-content/uploads/2022/02/best-coding-language-for-games.jpg',
+    image_url: '/renaissance-images/vitruvian-man.jpg',
+    aspect_ratio: '800/1088',
+    object_position: 'center 40%'
   },
   {
     title: 'E-commerce Final Project',
@@ -75,7 +99,9 @@ const projects = [
       'Implemented a responsive frontend using ReactJS.',
       'Ensured seamless integration between client and server with effective error handling.',
     ],
-    image_url: 'https://teachyourkidscode.com/wp-content/uploads/2022/02/best-coding-language-for-games.jpg',
+    image_url: '/renaissance-images/school-of-athens.jpg',
+    aspect_ratio: '800/621',
+    object_position: 'center'
   },
   {
     title: 'Ideas Management System',
@@ -86,173 +112,232 @@ const projects = [
       'Managed business activities including sprint planning, daily standups, and backlog refinement.',
       'Debugged and enhanced system performance for improved usability.',
     ],
-    image_url: 'https://teachyourkidscode.com/wp-content/uploads/2022/02/best-coding-language-for-games.jpg',
+    image_url: '/birth-of-venus.jpg',
+    aspect_ratio: '1920/1206',
+    object_position: 'center'
   },
 ]
 
 export default function Projects() {
-  const [currentSlide, setCurrentSlide] = useState(0)
-  const displayProjects = projects.slice(0, 9)
-  const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
-    slides: { perView: 3, spacing: 40 },
-    loop: true,
-    breakpoints: {
-      '(max-width: 1024px)': { slides: { perView: 2, spacing: 24 } },
-      '(max-width: 600px)': { slides: { perView: 1, spacing: 12 } },
-    },
-    slideChanged(s) {
-      setCurrentSlide(s.track.details.rel)
-    },
-  })
-
   const [ref, inView] = useInView({
-    triggerOnce: true,
+    triggerOnce: false,
     threshold: 0.1,
   })
+
+  const [expandedContributions, setExpandedContributions] = useState<Record<string, boolean>>({});
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  const toggleContributions = (title: string) => {
+    setExpandedContributions(prev => ({
+      ...prev,
+      [title]: !prev[title]
+    }));
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.2
+        staggerChildren: 0.15
       }
     }
   }
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: 30 },
     visible: {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.5
+        duration: 0.8,
+        ease: [0.65, 0, 0.35, 1]
       }
     }
   }
 
+  // Prevent hydration mismatch by only rendering motion effects on client
+  if (!isMounted) {
+    return (
+      <section id="projects" className="section py-24 md:py-32 relative renaissance-section">
+        <div className="renaissance-bg-overlay absolute inset-0"></div>
+        <div className="container-md relative z-10">
+          <div className="max-w-5xl mx-auto px-6">
+            <div className="renaissance-header">
+              <h2 className="text-4xl md:text-5xl font-semibold renaissance-title">
+                Projects
+              </h2>
+            </div>
+            
+            <div className="space-y-32">
+              {projects.map((project, index) => (
+                <div
+                  key={project.title}
+                  className="flex flex-col md:flex-row gap-8 md:gap-16"
+                >
+                  <div className="w-full md:w-2/5 flex flex-col">
+                    <RenaissanceFrame 
+                      src={project.image_url}
+                      alt={project.title}
+                      aspectRatio={project.aspect_ratio}
+                      objectPosition={project.object_position}
+                    />
+                    <div className="mt-2">
+                      <RenaissanceCaption text={project.title} />
+                    </div>
+                  </div>
+                  
+                  <div className="w-full md:w-3/5 space-y-6">
+                    <div className="overflow-hidden">
+                      <h3 className="text-2xl font-medium text-[#8D6748]">
+                        {project.title}
+                      </h3>
+                    </div>
+                    
+                    <p className="text-[#6B4F3A] leading-relaxed">
+                      {project.description}
+                    </p>
+                    
+                    {/* Static content without animations */}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
-    <section id="projects" className="py-24 relative overflow-hidden">
-      <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
-      <div className="container max-w-7xl mx-auto px-8 relative z-10">
+    <section id="projects" className="section py-24 md:py-32 relative renaissance-section">
+      {/* Background elements */}
+      <div className="absolute inset-0 bg-[#FDF6ED]/40 backdrop-blur-sm"></div>
+      <TextureOverlay />
+      
+      <div className="container-md relative z-10">
         <motion.div
           ref={ref}
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
           variants={containerVariants}
-          className="max-w-6xl mx-auto"
+          className="max-w-5xl mx-auto px-6 relative"
         >
-          <motion.h2 
-            variants={itemVariants}
-            className="text-5xl font-bold text-center mb-16 gradient-text"
-          >
-            Featured Projects
-          </motion.h2>
-          <div className="relative">
-            <div ref={sliderRef} className="keen-slider px-0">
-              {displayProjects.map((project, index) => (
+          {/* Content backdrop for better readability */}
+          <div className="absolute inset-0 bg-[#FDF6ED]/80 backdrop-blur-md rounded-2xl shadow-lg"></div>
+          
+          <div className="relative z-10 py-8 md:py-12">
+            <motion.div 
+              variants={itemVariants}
+              className="renaissance-header mb-16"
+            >
+              <h2 
+                className="text-4xl md:text-5xl font-bold text-[#6B4F3A] tracking-tight"
+                style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.15)' }}
+              >
+                <IlluminatedLetter letter="P" size="lg" animationDelay={0.2} className="mr-2" />
+                rojects
+              </h2>
+              <div className="h-1.5 w-32 bg-gradient-to-r from-[#6B4F3A] to-[#BFA181] mt-4 rounded-full"></div>
+              <RenaissanceDecorator type="header" animationDelay={0.4} />
+            </motion.div>
+            
+            <motion.div 
+              variants={containerVariants}
+              className="space-y-32"
+            >
+              {projects.map((project, index) => (
                 <motion.div
                   key={project.title}
                   variants={itemVariants}
-                  className="keen-slider__slide flex flex-col items-center h-full"
+                  className="flex flex-col md:flex-row gap-8 md:gap-16 relative"
                 >
-                  <div className="glass rounded-2xl overflow-hidden shadow-2xl flex flex-col w-full max-w-xs h-[780px] hover:border-cyan-400/50 transition-all duration-300">
-                    <div className="relative h-60 rounded-t-2xl overflow-hidden group">
-                      <img
+                  {/* Project card background */}
+                  <div className="absolute inset-0 bg-white/80 backdrop-blur-sm rounded-xl shadow-lg -z-10"></div>
+                  
+                  <div className="w-full md:w-2/5 flex flex-col p-4">
+                    <div className="shadow-xl rounded-lg overflow-hidden border-2 border-[#E9E4DE]">
+                      <RenaissanceFrame 
                         src={project.image_url}
                         alt={project.title}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        aspectRatio={project.aspect_ratio}
+                        objectPosition={project.object_position}
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <div className="absolute bottom-4 left-4 right-4 flex justify-center space-x-4">
-                          <motion.a
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.9 }}
-                            href="#"
-                            className="p-2 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-colors"
-                          >
-                            <FaGithub className="w-5 h-5 text-white" />
-                          </motion.a>
-                          <motion.a
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.9 }}
-                            href="#"
-                            className="p-2 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-colors"
-                          >
-                            <FaExternalLinkAlt className="w-5 h-5 text-white" />
-                          </motion.a>
-                        </div>
-                      </div>
                     </div>
-                    <div className="p-6 flex-1 flex flex-col h-full min-h-0">
-                      <h3 className="text-xl font-bold mb-2 text-cyan-200">{project.title}</h3>
-                      <p className="text-gray-300 mb-4 text-base line-clamp-3">
-                        {project.description}
-                      </p>
-                      <div className="flex flex-wrap gap-2 mb-4">
-                        {project.technologies.map((tech) => (
-                          <span
-                            key={tech}
-                            className="px-3 py-1 text-sm bg-gradient-to-r from-cyan-400/20 to-purple-500/20 text-cyan-200 rounded-full border border-cyan-400/20"
+                    <div className="mt-3">
+                      <RenaissanceCaption text={project.title} />
+                    </div>
+                  </div>
+                  
+                  <div className="w-full md:w-3/5 space-y-6 p-4">
+                    <div className="overflow-hidden">
+                      <h3 
+                        className="text-2xl font-bold text-[#6B4F3A]"
+                        style={{ textShadow: '1px 1px 2px rgba(0, 0, 0, 0.1)' }}
+                      >
+                        {project.title}
+                      </h3>
+                    </div>
+                    
+                    <p className="text-[#6B4F3A] leading-relaxed font-medium">
+                      {project.description}
+                    </p>
+                    
+                    <div>
+                      <h4 className="text-lg font-semibold text-[#8D6748] mb-3">Technologies</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {project.technologies.map(tech => (
+                          <span 
+                            key={tech} 
+                            className="px-3 py-1 bg-white rounded-full text-sm font-medium text-[#6B4F3A] border border-[#E9E4DE] shadow-sm"
                           >
                             {tech}
                           </span>
                         ))}
                       </div>
-                      <div className="mb-2 flex-1 min-h-0 overflow-y-auto">
-                        <p className="font-semibold text-cyan-200 mb-2">Key Contributions:</p>
-                        <ul className="list-disc list-inside text-gray-300 ml-4 text-sm space-y-1">
-                          {project.contributions.map((item, i) => (
-                            <li key={i}>{item}</li>
-                          ))}
-                        </ul>
-                      </div>
+                    </div>
+                    
+                    <div>
+                      <button
+                        onClick={() => toggleContributions(project.title)}
+                        className="flex items-center text-[#8D6748] font-medium hover:text-[#6B4F3A] transition-colors"
+                      >
+                        <span>{expandedContributions[project.title] ? 'Hide' : 'Show'} contributions</span>
+                        <span className="ml-2 text-xs">
+                          {expandedContributions[project.title] ? '▲' : '▼'}
+                        </span>
+                      </button>
+                      
+                      {expandedContributions[project.title] && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.3 }}
+                          className="mt-3 pl-4 border-l-2 border-[#BFA181]"
+                        >
+                          <ul className="space-y-2">
+                            {project.contributions.map((contribution, i) => (
+                              <li key={i} className="text-[#6B4F3A] flex items-start">
+                                <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#BFA181] mt-1.5 mr-2 flex-shrink-0"></span>
+                                <span>{contribution}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </motion.div>
+                      )}
                     </div>
                   </div>
                 </motion.div>
               ))}
-            </div>
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={() => instanceRef.current?.prev()}
-              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 glass rounded-full p-3 hover:border-cyan-400/50 transition-all duration-300"
-              aria-label="Previous"
-            >
-              <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" className="text-cyan-200">
-                <path d="M15 19l-7-7 7-7" />
-              </svg>
-            </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={() => instanceRef.current?.next()}
-              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 glass rounded-full p-3 hover:border-cyan-400/50 transition-all duration-300"
-              aria-label="Next"
-            >
-              <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" className="text-cyan-200">
-                <path d="M9 5l7 7-7 7" />
-              </svg>
-            </motion.button>
-            <div className="flex justify-center mt-8 space-x-2">
-              {Array.from({ length: 3 }).map((_, idx) => (
-                <motion.button
-                  key={idx}
-                  whileHover={{ scale: 1.2 }}
-                  whileTap={{ scale: 0.9 }}
-                  onClick={() => instanceRef.current?.moveToIdx(idx * 3)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                    Math.floor(currentSlide / 3) === idx 
-                      ? 'bg-gradient-to-r from-cyan-400 to-purple-500' 
-                      : 'bg-gray-600'
-                  }`}
-                  aria-label={`Go to page ${idx + 1}`}
-                />
-              ))}
-            </div>
+            </motion.div>
           </div>
         </motion.div>
       </div>
     </section>
-  )
+  );
 } 
