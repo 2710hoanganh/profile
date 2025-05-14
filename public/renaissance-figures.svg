@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1000" viewBox="0 0 1000 1000">
+  <style>
+    .figure { opacity: 0.05; fill: #8D6748; }
+    .figure-outline { fill: none; stroke: #A47551; stroke-width: 1; opacity: 0.03; }
+  </style>
+  
+  <!-- Mona Lisa silhouette -->
+  <path class="figure" d="M300,200 C280,220 270,250 270,280 C270,320 280,350 300,370 C310,380 320,385 330,385 C340,385 350,380 360,370 C370,360 375,350 375,340 C375,330 370,320 360,310 C350,300 345,290 345,280 C345,270 350,260 360,250 C370,240 375,230 375,220 C375,210 370,200 360,190 C350,180 340,175 330,175 C320,175 310,180 300,200 Z" />
+  <path class="figure-outline" d="M300,200 C280,220 270,250 270,280 C270,320 280,350 300,370 C310,380 320,385 330,385 C340,385 350,380 360,370 C370,360 375,350 375,340 C375,330 370,320 360,310 C350,300 345,290 345,280 C345,270 350,260 360,250 C370,240 375,230 375,220 C375,210 370,200 360,190 C350,180 340,175 330,175 C320,175 310,180 300,200 Z" />
+  
+  <!-- Vitruvian Man -->
+  <circle class="figure-outline" cx="600" cy="300" r="100" />
+  <path class="figure" d="M600,200 L600,400 M500,300 L700,300 M540,240 L660,360 M540,360 L660,240" />
+  <path class="figure-outline" d="M600,200 L600,400 M500,300 L700,300 M540,240 L660,360 M540,360 L660,240" />
+  
+  <!-- David silhouette -->
+  <path class="figure" d="M800,600 C780,580 770,550 770,520 C770,490 780,470 800,460 C820,450 840,450 860,460 C880,470 890,490 890,520 C890,550 880,580 860,600 C840,620 820,620 800,600 Z" />
+  <path class="figure-outline" d="M800,600 C780,580 770,550 770,520 C770,490 780,470 800,460 C820,450 840,450 860,460 C880,470 890,490 890,520 C890,550 880,580 860,600 C840,620 820,620 800,600 Z" />
+  <path class="figure" d="M830,600 L830,700 L840,750 L820,750 L830,700" />
+  <path class="figure-outline" d="M830,600 L830,700 L840,750 L820,750 L830,700" />
+  
+  <!-- Birth of Venus silhouette -->
+  <path class="figure" d="M400,700 C380,680 370,650 370,620 C370,590 380,570 400,560 C420,550 440,550 460,560 C480,570 490,590 490,620 C490,650 480,680 460,700 C440,720 420,720 400,700 Z" />
+  <path class="figure-outline" d="M400,700 C380,680 370,650 370,620 C370,590 380,570 400,560 C420,550 440,550 460,560 C480,570 490,590 490,620 C490,650 480,680 460,700 C440,720 420,720 400,700 Z" />
+  <ellipse class="figure" cx="430" cy="550" rx="60" ry="30" />
+  <ellipse class="figure-outline" cx="430" cy="550" rx="60" ry="30" />
+  
+  <!-- Last Supper silhouette -->
+  <rect class="figure" x="150" y="450" width="300" height="80" rx="10" />
+  <rect class="figure-outline" x="150" y="450" width="300" height="80" rx="10" />
+  <circle class="figure" cx="180" cy="490" r="10" />
+  <circle class="figure" cx="210" cy="490" r="10" />
+  <circle class="figure" cx="240" cy="490" r="10" />
+  <circle class="figure" cx="270" cy="490" r="10" />
+  <circle class="figure" cx="300" cy="490" r="10" />
+  <circle class="figure" cx="330" cy="490" r="10" />
+  <circle class="figure" cx="360" cy="490" r="10" />
+  <circle class="figure" cx="390" cy="490" r="10" />
+  <circle class="figure" cx="420" cy="490" r="10" />
+  
+  <!-- School of Athens -->
+  <rect class="figure-outline" x="550" y="800" width="300" height="100" rx="10" />
+  <circle class="figure" cx="600" cy="850" r="15" />
+  <circle class="figure" cx="650" cy="850" r="15" />
+  <circle class="figure" cx="700" cy="850" r="15" />
+  <circle class="figure" cx="750" cy="850" r="15" />
+  <circle class="figure" cx="800" cy="850" r="15" />
+  <path class="figure-outline" d="M580,850 L620,850 M630,850 L670,850 M680,850 L720,850 M730,850 L770,850 M780,850 L820,850" />
+</svg> 

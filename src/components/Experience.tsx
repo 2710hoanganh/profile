@@ -2,7 +2,12 @@
 
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
-import { FaBriefcase, FaCalendarAlt, FaMapMarkerAlt, FaUsers, FaCode } from 'react-icons/fa'
+import { useState, useEffect } from 'react'
+import { FaChevronDown } from 'react-icons/fa'
+import TextureOverlay from './TextureOverlay'
+import IlluminatedLetter from './IlluminatedLetter'
+import RenaissanceDecorator from './RenaissanceDecorator'
+import RenaissanceScroll from './RenaissanceScroll'
 
 const experiences = [
   {
@@ -56,7 +61,7 @@ const experiences = [
     company: 'iDeaLogic',
     period: '12/2023 – 4/2024',
     location: 'Ho Chi Minh City',
-    project: "What's The Price", // link có thể thêm sau
+    project: "What's The Price",
     description: [
       'A pricing and negotiation analytics platform that provides insights into supplier pricing to support strategic purchasing decisions.'
     ],
@@ -118,16 +123,30 @@ const experiences = [
 
 export default function Experience() {
   const [ref, inView] = useInView({
-    triggerOnce: true,
+    triggerOnce: false,
     threshold: 0.1,
   })
+
+  const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({});
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  const toggleResponsibilities = (title: string) => {
+    setExpandedItems(prev => ({
+      ...prev,
+      [title]: !prev[title]
+    }));
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.2
+        staggerChildren: 0.1
       }
     }
   }
@@ -143,90 +162,158 @@ export default function Experience() {
     }
   }
 
+  // Prevent hydration mismatch by only rendering motion effects on client
+  if (!isMounted) {
+    return (
+      <section id="experience" className="section py-24 md:py-32 relative renaissance-section">
+        <div className="renaissance-bg-overlay absolute inset-0"></div>
+        <div className="container-md relative z-10">
+          <div className="max-w-5xl mx-auto">
+            <div className="renaissance-header">
+              <h2 className="text-4xl md:text-5xl font-semibold renaissance-title">
+                Experience
+              </h2>
+            </div>
+            <div className="space-y-8">
+              {experiences.map((experience, index) => (
+                <div key={experience.title}>
+                  <div className="scroll-paper pt-8 p-6 shadow-sm">
+                    {/* Basic content without animations */}
+                    <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4 mb-6">
+                      <div>
+                        <h3 className="text-2xl font-medium text-[#8D6748] mb-1">
+                          {experience.title}
+                        </h3>
+                        <p className="text-[#A47551] font-medium">{experience.company}</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-[#6B4F3A] font-medium">{experience.period}</p>
+                        <p className="text-[#BFA181]">{experience.location}</p>
+                      </div>
+                    </div>
+                    {/* Rest of static content */}
+                  </div>
+                  {index < experiences.length - 1 && (
+                    <div className="renaissance-divider my-8"></div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
-    <section id="experience" className="py-24 relative overflow-hidden">
-      <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
-      <div className="container mx-auto px-4 relative z-10">
+    <section id="experience" className="section py-24 md:py-32 relative renaissance-section">
+      <div className="renaissance-bg-overlay absolute inset-0"></div>
+      <TextureOverlay />
+      <div className="container-md relative z-10">
         <motion.div
           ref={ref}
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
           variants={containerVariants}
-          className="max-w-6xl mx-auto"
+          className="max-w-5xl mx-auto"
         >
-          <motion.h2 
+          <motion.div 
             variants={itemVariants}
-            className="text-5xl font-bold text-center mb-16 gradient-text"
+            className="renaissance-header"
           >
-            Work Experience
-          </motion.h2>
+            <h2 className="text-4xl md:text-5xl font-semibold renaissance-title">
+              <IlluminatedLetter letter="E" size="lg" animationDelay={0.2} className="mr-2" />
+              xperience
+            </h2>
+            <RenaissanceDecorator type="header" animationDelay={0.4} />
+          </motion.div>
+
           <div className="space-y-8">
             {experiences.map((experience, index) => (
               <motion.div
                 key={experience.title}
                 variants={itemVariants}
-                whileHover={{ scale: 1.02 }}
-                className="glass p-8 rounded-2xl hover:border-cyan-400/50 transition-all duration-300"
               >
-                <div className="flex flex-col md:flex-row justify-between items-start gap-6 mb-6">
-                  <div className="flex-1">
-                    <div className="flex items-center space-x-4 mb-4">
-                      <div className="p-3 rounded-xl bg-gradient-to-br from-cyan-400 to-purple-500">
-                        <FaBriefcase className="w-6 h-6 text-white" />
-                      </div>
-                      <div>
-                        <h3 className="text-2xl font-semibold text-cyan-200">{experience.title}</h3>
-                        <p className="text-cyan-300">{experience.company}</p>
-                      </div>
+                <RenaissanceScroll animationDelay={index * 0.1}>
+                  <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4 mb-6">
+                    <div>
+                      <h3 className="text-2xl font-medium text-[#8D6748] mb-1">
+                        {experience.title}
+                      </h3>
+                      <p className="text-[#A47551] font-medium">{experience.company}</p>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                      <div className="flex items-center space-x-3">
-                        <FaCalendarAlt className="w-5 h-5 text-cyan-400" />
-                        <span className="text-cyan-300">{experience.period}</span>
-                      </div>
-                      <div className="flex items-center space-x-3">
-                        <FaMapMarkerAlt className="w-5 h-5 text-cyan-400" />
-                        <span className="text-cyan-300">{experience.location}</span>
-                      </div>
-                      <div className="flex items-center space-x-3">
-                        <FaCode className="w-5 h-5 text-cyan-400" />
-                        <span className="text-cyan-300">{experience.role}</span>
-                      </div>
-                      <div className="flex items-center space-x-3">
-                        <FaUsers className="w-5 h-5 text-cyan-400" />
-                        <span className="text-cyan-300">Team size: {experience.teamSize}</span>
-                      </div>
+                    <div className="text-right">
+                      <p className="text-[#6B4F3A] font-medium">{experience.period}</p>
+                      <p className="text-[#BFA181]">{experience.location}</p>
                     </div>
                   </div>
-                </div>
 
-                <div className="mb-6">
-                  <h4 className="text-xl font-semibold text-cyan-200 mb-2">Project: {experience.project}</h4>
-                  <ul className="list-disc list-inside space-y-2 text-gray-300 mb-4">
-                    {experience.description.map((item, i) => (
-                      <li key={i}>{item}</li>
-                    ))}
-                  </ul>
-                  <div className="flex flex-wrap gap-2">
-                    {experience.technology.split(', ').map((tech, i) => (
-                      <span
-                        key={i}
-                        className="px-3 py-1 text-sm bg-gradient-to-r from-cyan-400/20 to-purple-500/20 text-cyan-200 rounded-full border border-cyan-400/20"
+                  <div className="space-y-4">
+                    <div>
+                      <h4 className="text-lg font-medium text-[#A47551] mb-2">Project: {experience.project}</h4>
+                      <div className="space-y-2">
+                        {experience.description.map((desc, i) => (
+                          <p key={i} className="text-[#6B4F3A]">{desc}</p>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div className="flex flex-wrap gap-2 pt-2">
+                      {experience.technology.split(', ').slice(0, 5).map((tech) => (
+                        <span
+                          key={tech}
+                          className="px-3 py-1.5 text-sm bg-[rgba(253,246,237,0.7)] border border-[#E9E4DE] text-[#A47551] rounded-sm"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                      {experience.technology.split(', ').length > 5 && (
+                        <span className="px-3 py-1.5 text-sm text-[#A47551]">
+                          +{experience.technology.split(', ').length - 5} more
+                        </span>
+                      )}
+                    </div>
+                    
+                    <div>
+                      <div 
+                        className="flex items-center justify-between cursor-pointer mb-3" 
+                        onClick={() => toggleResponsibilities(experience.title)}
                       >
-                        {tech}
-                      </span>
-                    ))}
+                        <h4 className="text-lg font-medium text-[#A47551]">Responsibilities:</h4>
+                        <FaChevronDown 
+                          className={`text-[#A47551] transition-transform duration-300 ${expandedItems[experience.title] ? 'transform rotate-180' : ''}`} 
+                        />
+                      </div>
+                      
+                      <div className={`responsibilities-container ${expandedItems[experience.title] ? 'responsibilities-expanded' : 'responsibilities-collapsed'}`}>
+                        <ul className="renaissance-list">
+                          {experience.responsibilities.map((responsibility, i) => (
+                            <li key={i} className="text-[#6B4F3A]">
+                              {responsibility}
+                            </li>
+                          ))}
+                        </ul>
+                        
+                        {!expandedItems[experience.title] && experience.responsibilities.length > 2 && (
+                          <div 
+                            className="show-more-btn"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleResponsibilities(experience.title);
+                            }}
+                          >
+                            + {experience.responsibilities.length - 2} more responsibilities
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                </div>
-
-                <div>
-                  <h4 className="text-xl font-semibold text-cyan-200 mb-3">Key Responsibilities:</h4>
-                  <ul className="list-disc list-inside space-y-2 text-gray-300">
-                    {experience.responsibilities.map((item, i) => (
-                      <li key={i}>{item}</li>
-                    ))}
-                  </ul>
-                </div>
+                </RenaissanceScroll>
+                {index < experiences.length - 1 && (
+                  <div className="my-8">
+                    <RenaissanceDecorator type="divider" animationDelay={0.2} />
+                  </div>
+                )}
               </motion.div>
             ))}
           </div>

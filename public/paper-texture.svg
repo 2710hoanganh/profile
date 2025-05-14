@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="500" height="500" viewBox="0 0 500 500">
+  <!-- Fine grain paper texture -->
+  <filter id="paper-noise">
+    <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="5" seed="1" />
+    <feDisplacementMap in="SourceGraphic" scale="5" />
+  </filter>
+  
+  <!-- Subtle noise overlay -->
+  <filter id="fine-noise">
+    <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch" />
+    <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.15 0" />
+  </filter>
+  
+  <!-- Aged paper stains -->
+  <filter id="paper-stains">
+    <feTurbulence type="turbulence" baseFrequency="0.01" numOctaves="2" seed="2" />
+    <feColorMatrix type="matrix" values="0 0 0 0 0.55 0 0 0 0 0.41 0 0 0 0 0.29 0 0 0 0.05 0" />
+    <feGaussianBlur stdDeviation="10" />
+  </filter>
+  
+  <!-- Base paper color with slight yellowing -->
+  <rect width="500" height="500" fill="#FDF6ED" />
+  
+  <!-- Aged stains layer -->
+  <rect width="500" height="500" filter="url(#paper-stains)" opacity="0.08" />
+  
+  <!-- Fine grain texture -->
+  <rect width="500" height="500" filter="url(#fine-noise)" opacity="0.12" />
+  
+  <!-- Paper texture displacement -->
+  <rect width="500" height="500" filter="url(#paper-noise)" fill="none" />
+  
+  <!-- Very subtle vignette -->
+  <radialGradient id="vignette" cx="50%" cy="50%" r="65%" fx="50%" fy="50%">
+    <stop offset="0%" stop-color="transparent" />
+    <stop offset="100%" stop-color="#8D6748" stop-opacity="0.05" />
+  </radialGradient>
+  <rect width="500" height="500" fill="url(#vignette)" />
+</svg> 
